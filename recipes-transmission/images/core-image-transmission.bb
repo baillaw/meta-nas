@@ -1,13 +1,15 @@
-DESCRIPTION = "A small image just capable of allowing a device to boot."
+DESCRIPTION = "A console-only image with more full-featured Linux system \
+functionality installed."
 
-IMAGE_INSTALL = "packagegroup-core-boot transmission-web "
-
-IMAGE_LINGUAS = " "
-
-LICENSE = "MIT"
+IMAGE_FEATURES += "splash ssh-server-openssh"
 
 inherit core-image
 
-IMAGE_ROOTFS_SIZE = "2097152"
+IMAGE_INSTALL = "\
+    ${CORE_IMAGE_BASE_INSTALL} \
+    packagegroup-core-full-cmdline \
+    packagegroup-core-boot \
+    transmission-web \
+     "
 
-
+inherit core-image

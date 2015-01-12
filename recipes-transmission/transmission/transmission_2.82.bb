@@ -31,9 +31,12 @@ do_configure_prepend() {
      intltoolize --copy --force --automake
 }
 
-do_install_append() {
+do_install_systemd() {
 	install -d ${D}${nonarch_base_libdir}/systemd/system
 	install -m 0644 ${S}/daemon/transmission-daemon.service ${D}${nonarch_base_libdir}/systemd/system
+}
+do_install_append() {
+	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', '', d)}
 }
 
 PACKAGES += "${PN}-gui ${PN}-client ${PN}-web"
@@ -45,7 +48,6 @@ FILES_${PN}-web = "${datadir}/transmission/web"
 FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir}"
 
 SYSTEMD_SERVICE_${PN} = "transmission-daemon.service"
-
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "--system transmission"
 USERADD_PARAM_${PN} = "--home ${localstatedir}/lib/transmission-daemon --create-home \

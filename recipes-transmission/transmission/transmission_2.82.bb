@@ -5,16 +5,20 @@ HOMEPAGE = "www.transmissionbt.com/"
 DEPENDS = "libevent gnutls openssl libtool intltool-native curl"
 
 RDEPENDS_${PN}-web = "${PN} lighttpd"
+RDEPENDS_${PN} = "${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', 'start-stop-daemon', d)}"
+
 LICENSE = "MIT & GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=7ee657ac1dce0e7353033fc06c8087d2"
 
 REQUIRED_DISTRO_FEATURES = " libc-locale-code "
 
-SRC_URI = "http://download.transmissionbt.com/files/transmission-${PV}.tar.xz"
+SRC_URI = "http://download.transmissionbt.com/files/transmission-${PV}.tar.xz \
+		   file://transmission-daemon \
+			"
 SRC_URI[md5sum] = "a5ef870c0410b12d10449c2d36fa4661"
 SRC_URI[sha256sum] = "3996651087df67a85f1e1b4a92b1b518ddefdd84c654b8df6fbccb0b91f03522"
 
-inherit autotools gettext useradd systemd distro_features_check
+inherit autotools gettext useradd update-rc.d  systemd distro_features_check
 
 PACKAGECONFIG = "${@base_contains('DISTRO_FEATURES', 'x11', 'gtk', '', d)} \
                  ${@base_contains('DISTRO_FEATURES','systemd','systemd','',d)}"
@@ -31,12 +35,18 @@ do_configure_prepend() {
      intltoolize --copy --force --automake
 }
 
+do_install_initd() {
+	install -d ${D}${sysconfdir}/init.d
+    install -m 0744 ${WORKDIR}/transmission-daemon ${D}${sysconfdir}/init.d/
+	chown root:root ${D}${sysconfdir}/init.d/transmission-daemon
+}
+
 do_install_systemd() {
 	install -d ${D}${nonarch_base_libdir}/systemd/system
 	install -m 0644 ${S}/daemon/transmission-daemon.service ${D}${nonarch_base_libdir}/systemd/system
 }
 do_install_append() {
-	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', '', d)}
+	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
 }
 
 PACKAGES += "${PN}-gui ${PN}-client ${PN}-web"
@@ -62,3 +72,8 @@ pkg_postinst_${PN}-web () {
 mv /www/pages /www/pages_bkp
 ln -s ${datadir}/transmission/web /www/pages
 }
+
+
+INITSCRIPT_NAME = "transmission-daemon"
+INITSCRIPT_PARAMS = "defaults 80"
+

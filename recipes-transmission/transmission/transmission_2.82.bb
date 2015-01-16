@@ -4,7 +4,7 @@ HOMEPAGE = "www.transmissionbt.com/"
 
 DEPENDS = "libevent gnutls openssl libtool intltool-native curl"
 
-RDEPENDS_${PN}-web = "${PN} lighttpd"
+RDEPENDS_${PN}-web = "${PN}"
 RDEPENDS_${PN} = "${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', 'start-stop-daemon', d)}"
 
 LICENSE = "MIT & GPLv2"
@@ -65,13 +65,6 @@ USERADD_PARAM_${PN} = "--home ${localstatedir}/lib/transmission-daemon --create-
                        --shell ${base_bindir}/false \
                        --system \
                        transmission"
-
-
-pkg_postinst_${PN}-web () {
-#!/bin/sh -e
-mv /www/pages /www/pages_bkp
-ln -s ${datadir}/transmission/web /www/pages
-}
 
 
 INITSCRIPT_NAME = "transmission-daemon"

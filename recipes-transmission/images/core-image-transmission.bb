@@ -10,6 +10,7 @@ IMAGE_INSTALL = "\
     packagegroup-core-full-cmdline \
     packagegroup-core-boot \
     transmission-web \
+    filemanager \
      "
 
 inherit core-image

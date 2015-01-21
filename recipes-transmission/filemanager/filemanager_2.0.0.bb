@@ -2,9 +2,11 @@ DESCRIPTION = "A web file-explorer"
 SECTION = "network"
 HOMEPAGE = "https://github.com/simogeo/Filemanager"
 
-RDEPENDS_${PN} = "lighttpd php-cgi"
+RDEPENDS_${PN} = "lighttpd php-cgi python"
 
 SRC_URI = "https://github.com/simogeo/Filemanager/archive/v${PV}.tar.gz"
+SRC_URI += "file://0001-Move-fromPython2.6toPython.patch"
+
 SRC_URI[md5sum] = "665547ad10bd4aeda5f36fd23558fd8b"
 SRC_URI[sha256sum] = "03057cf948d9a63ed832931bd0dbaf692889a9da51015ec7c294451643090942"
 
@@ -24,7 +26,7 @@ do_install () {
     [ -d "${S}" ] || exit 1
     mkdir -p ${D}/www/pages/${PN} || exit 1
     cd ${S} || exit 1
-    tar --no-same-owner -cpf - . \
+    tar --no-same-owner --exclude='./patches' --exclude='./.pc' -cpf - . \
         | tar --no-same-owner -xpf - -C ${D}/www/pages/${PN}
     cp ${WORKDIR}/filemanager.config.js ${D}/www/pages/${PN}/scripts/
 }

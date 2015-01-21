@@ -1,0 +1,12 @@
+diff --git a/connectors/php/filemanager.origin.php b//connectors/php/filemanager.php
+index 64cff33..8b5b8c0 100755
+--- a/connectors/php/filemanager.origin.php
++++ b/connectors/php/filemanager.php
+@@ -13,6 +13,7 @@
+  *  @author		Simon Georget <simon (at) linea21 (dot) com>
+  *	@copyright	Authors
+  */
++error_reporting(0);
+ 
+ require_once('filemanager.class.php');
+ 

@@ -6,6 +6,7 @@ RDEPENDS_${PN} = "lighttpd php-cgi python"
 
 SRC_URI = "https://github.com/simogeo/Filemanager/archive/v${PV}.tar.gz"
 SRC_URI += "file://0001-Move-fromPython2.6toPython.patch"
+SRC_URI += "file://0002-Desactivate-php-errors.patch"
 
 SRC_URI[md5sum] = "665547ad10bd4aeda5f36fd23558fd8b"
 SRC_URI[sha256sum] = "03057cf948d9a63ed832931bd0dbaf692889a9da51015ec7c294451643090942"

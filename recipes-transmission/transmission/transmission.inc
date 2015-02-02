@@ -54,6 +54,15 @@ do_install_append() {
 	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
 }
 
+pkg_postinst_${PN}() {
+	if [ -n "$D" ]; then
+		exit 1
+	else
+		sysctl -w net.core.rmem_max=4194304
+		sysctl -w net.core.wmem_max=1048576
+	fi
+}
+ 
 PACKAGES += "${PN}-gui ${PN}-client ${PN}-web"
 
 FILES_${PN}-client = "${bindir}/transmission-remote ${bindir}/transmission-cli ${bindir}/transmission-create ${bindir}/transmission-show ${bindir}/transmission-edit"

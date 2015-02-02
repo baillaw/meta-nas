@@ -14,13 +14,15 @@ SRC_URI[sha256sum] = "03057cf948d9a63ed832931bd0dbaf692889a9da51015ec7c294451643
 SRC_URI += "file://filemanager.config.js"
 
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://scripts/filemanager.min.js;md5=7ee657ac1dce0e7353033fc06c8087d2"
+LIC_FILES_CHKSUM = "file://scripts/filemanager.min.js;md5=3bf576eb56bd8e9a5a7c2a45b45ffc1b"
 
 S = "${WORKDIR}/Filemanager-${PV}"
 
-do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
+do_configure () {
+	sed -i -e "s:@FILE_PATH@:${DOWNLOAD_DIR_TRANSMISSION}:" ${WORKDIR}/filemanager.config.js
+}
 
 do_install () {
     # Do it carefully

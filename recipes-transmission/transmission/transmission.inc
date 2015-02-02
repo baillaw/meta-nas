@@ -18,8 +18,8 @@ SRC_URI = "svn://svn.transmissionbt.com/Transmission/;protocol=svn;module=trunk"
 
 S = "${WORKDIR}/trunk"
 
-SRC_URI =+ "file://transmission-daemon"
-
+SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'systemd', '', 'file://transmission-daemon', d)}"
+SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'file://send-email-transmission.sh', '', d)}"
 
 inherit autotools gettext useradd update-rc.d  systemd distro_features_check
 
@@ -50,8 +50,14 @@ do_install_systemd() {
 	install -d ${D}${nonarch_base_libdir}/systemd/system
 	install -m 0644 ${S}/daemon/transmission-daemon.service ${D}${nonarch_base_libdir}/systemd/system
 }
+
+do_install_send_mail_script() {
+	install -m 0755 ${WORKDIR}/send-email-transmission.sh ${D}${bindir}/send-email-transmission.sh
+}
+
 do_install_append() {
 	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
+	${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
 }
 
 pkg_postinst_${PN}() {
@@ -60,6 +66,10 @@ pkg_postinst_${PN}() {
 	else
 		sysctl -w net.core.rmem_max=4194304
 		sysctl -w net.core.wmem_max=1048576
+		if ${@bb.utils.contains("DISTRO_FEATURES", "busybox_send_email", "true", "false", d)}; then
+			sed -i -e 's@"script-torrent-done-enabled": false,@"script-torrent-done-enabled": true,@'  ${localstatedir}/lib/transmission-daemon/.config/settings.json
+			sed -i -e 's@"script-torrent-done-filename": "",@"script-torrent-done-filename": "/usr/bin/send-email-transmission.sh",@'  ${localstatedir}/lib/transmission-daemon/.config/settings.json
+		fi
 	fi
 }
  
@@ -69,7 +79,7 @@ FILES_${PN}-client = "${bindir}/transmission-remote ${bindir}/transmission-cli $
 FILES_${PN}-gui += "${bindir}/transmission-gtk ${datadir}/icons ${datadir}/applications ${datadir}/pixmaps"
 FILES_${PN}-web = "${datadir}/transmission/web"
 
-FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir}"
+FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir} ${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', '${bindir}/send-email-transmission.sh', '', d)}"
 
 SYSTEMD_SERVICE_${PN} = "transmission-daemon.service"
 USERADD_PACKAGES = "${PN}"

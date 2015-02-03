@@ -21,8 +21,8 @@ S = "${WORKDIR}/trunk"
 
 SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'systemd', '', 'file://transmission-daemon', d)}"
 SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'file://send-email-transmission.sh', '', d)}"
-DOWNLOAD_DIR_TRANSMISSION ??= "/var/lib/transmission-daemon/Downloads"
-
+HOME_DIR_TRANSMISSION ??= "${localstatedir}/lib/transmission-daemon"
+DOWNLOAD_DIR_TRANSMISSION ??= "${HOME_DIR_TRANSMISSION}/Downloads"
 inherit autotools gettext useradd update-rc.d  systemd distro_features_check
 
 PACKAGECONFIG = "${@base_contains('DISTRO_FEATURES', 'x11', 'gtk', '', d)} \
@@ -57,19 +57,19 @@ do_install_systemd() {
 
 do_install_send_mail_script() {
 	install -m 0755 ${WORKDIR}/send-email-transmission.sh ${D}${bindir}/send-email-transmission.sh
-	sed -i -e 's@"script-torrent-done-enabled": false,@"script-torrent-done-enabled": true,@'  ${D}${sysconfdir}/settings.json
-	sed -i -e 's@"script-torrent-done-filename": "",@"script-torrent-done-filename": "/usr/bin/send-email-transmission.sh",@'  ${D}${sysconfdir}/settings.json
+	sed -i -e 's@"script-torrent-done-enabled": false,@"script-torrent-done-enabled": true,@'  ${D}${HOME_DIR_TRANSMISSION}/settings.json
+	sed -i -e 's@"script-torrent-done-filename": "",@"script-torrent-done-filename": "/usr/bin/send-email-transmission.sh",@'  ${D}${HOME_DIR_TRANSMISSION}/settings.json
 }
 
 do_set_download_dir() {
-	sed -i -e 's@"download-dir": "", @"download-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${sysconfdir}/settings.json
-	sed -i -e 's@"incomplete-dir": "", @"incomplete-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${sysconfdir}/settings.json
+	sed -i -e 's@"download-dir": "", @"download-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${HOME_DIR_TRANSMISSION}/settings.json
+	sed -i -e 's@"incomplete-dir": "", @"incomplete-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${HOME_DIR_TRANSMISSION}/settings.json
 }
 
 do_set_whitelist() {
 	if [ -z ${IP_ALLOWED_TRANSMISSION+x} ]; then
 	#${@bb.warn('transmission : IP_ALLOWED_TRANSMISSION is not set so rpc-whitelist-enabled will be disabled' )}
-		sed -i -e 's@"rpc-whitelist-enabled": true,@"rpc-whitelist-enabled": false,@'   ${D}${sysconfdir}/settings.json;
+		sed -i -e 's@"rpc-whitelist-enabled": true,@"rpc-whitelist-enabled": false,@'   ${D}${HOME_DIR_TRANSMISSION}/settings.json;
 	else 
 		echo "var is set to '$var'"; 
 	fi
@@ -78,12 +78,14 @@ do_set_whitelist() {
 
 do_install_append() {
 
-	install -d ${D}${sysconfdir}
-	install -m 0644 ${WORKDIR}/settings.json ${D}${sysconfdir}/settings.json
+	install -d ${D}${HOME_DIR_TRANSMISSION}
+	install -m 0644 ${WORKDIR}/settings.json ${D}${HOME_DIR_TRANSMISSION}/settings.json
 	do_set_download_dir
 	do_set_whitelist
 	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
 	${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
+	chmod 0644 -R ${D}${HOME_DIR_TRANSMISSION}
+	chown -R transmission:transmission ${D}${HOME_DIR_TRANSMISSION}
 }
 
 pkg_postinst_${PN}() {
@@ -101,12 +103,12 @@ FILES_${PN}-client = "${bindir}/transmission-remote ${bindir}/transmission-cli $
 FILES_${PN}-gui += "${bindir}/transmission-gtk ${datadir}/icons ${datadir}/applications ${datadir}/pixmaps"
 FILES_${PN}-web = "${datadir}/transmission/web"
 
-FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir} ${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', '${bindir}/send-email-transmission.sh', '', d)}"
+FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir} ${HOME_DIR_TRANSMISSION}/settings.json ${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', '${bindir}/send-email-transmission.sh', '', d)}"
 
 SYSTEMD_SERVICE_${PN} = "transmission-daemon.service"
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "--system transmission"
-USERADD_PARAM_${PN} = "--home ${localstatedir}/lib/transmission-daemon --create-home \
+USERADD_PARAM_${PN} = "--home ${HOME_DIR_TRANSMISSION} --create-home \
                        --gid transmission \
                        --shell ${base_bindir}/false \
                        --system \

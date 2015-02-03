@@ -14,12 +14,14 @@ REQUIRED_DISTRO_FEATURES = " libc-locale-code "
 # Upstream names releases after SVN revs
 PV = "r${SRCREV}"
 
-SRC_URI = "svn://svn.transmissionbt.com/Transmission/;protocol=svn;module=trunk"
+SRC_URI = "svn://svn.transmissionbt.com/Transmission/;protocol=svn;module=trunk \
+          file://settings.json"
 
 S = "${WORKDIR}/trunk"
 
 SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'systemd', '', 'file://transmission-daemon', d)}"
 SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'file://send-email-transmission.sh', '', d)}"
+DOWNLOAD_DIR_TRANSMISSION ??= "/var/lib/transmission-daemon/Downloads"
 
 inherit autotools gettext useradd update-rc.d  systemd distro_features_check
 
@@ -43,21 +45,48 @@ do_configure_prepend() {
 do_install_initd() {
 	install -d ${D}${sysconfdir}/init.d
     install -m 0744 ${WORKDIR}/transmission-daemon ${D}${sysconfdir}/init.d/
-	chown root:root ${D}${sysconfdir}/init.d/transmission-daemon
+	sed -i -e 's@#TRANSMISSION_ARGS=""@TRANSMISSION_ARGS=" -g ${sysconfdir}"@'  ${D}${sysconfdir}/init.d/transmission-daemon
+    chown root:root ${D}${sysconfdir}/init.d/transmission-daemon
 }
 
 do_install_systemd() {
 	install -d ${D}${nonarch_base_libdir}/systemd/system
 	install -m 0644 ${S}/daemon/transmission-daemon.service ${D}${nonarch_base_libdir}/systemd/system
+	sed -i -e 's@/usr/bin/transmission-daemon -f --log-error@/usr/bin/transmission-daemon -f --log-error -g ${sysconfdir}@' ${D}${nonarch_base_libdir}/systemd/system/transmission-daemon.service
+
 }
 
 do_install_send_mail_script() {
 	install -m 0755 ${WORKDIR}/send-email-transmission.sh ${D}${bindir}/send-email-transmission.sh
+	sed -i -e 's@"script-torrent-done-enabled": false,@"script-torrent-done-enabled": true,@'  ${D}${sysconfdir}/settings.json
+	sed -i -e 's@"script-torrent-done-filename": "",@"script-torrent-done-filename": "/usr/bin/send-email-transmission.sh",@'  ${D}${sysconfdir}/settings.json
 }
 
+do_set_download_dir() {
+    
+	sed -i -e 's@"download-dir": "", @"download-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${sysconfdir}/settings.json
+	sed -i -e 's@"incomplete-dir": "", @"incomplete-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${sysconfdir}/settings.json
+}
+
+do_set_whitelist() {
+
+	if [ -z ${IP_ALLOWED_TRANSMISSION+x} ]; then
+	#${@bb.warn('transmission : IP_ALLOWED_TRANSMISSION is not set so rpc-whitelist-enabled will be disabled' )}
+		sed -i -e 's@"rpc-whitelist-enabled": true,@"rpc-whitelist-enabled": false,@'   ${D}${sysconfdir}/settings.json;
+	else 
+		echo "var is set to '$var'"; 
+	fi
+}
+
+
 do_install_append() {
+
+	install -d ${D}${sysconfdir}
+	install -m 0644 ${WORKDIR}/settings.json ${D}${sysconfdir}/settings.json
+	do_set_download_dir
+	do_set_whitelist
 	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
-	${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
+	${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
 }
 
 pkg_postinst_${PN}() {
@@ -66,10 +95,6 @@ pkg_postinst_${PN}() {
 	else
 		sysctl -w net.core.rmem_max=4194304
 		sysctl -w net.core.wmem_max=1048576
-		if ${@bb.utils.contains("DISTRO_FEATURES", "busybox_send_email", "true", "false", d)}; then
-			sed -i -e 's@"script-torrent-done-enabled": false,@"script-torrent-done-enabled": true,@'  ${localstatedir}/lib/transmission-daemon/.config/settings.json
-			sed -i -e 's@"script-torrent-done-filename": "",@"script-torrent-done-filename": "/usr/bin/send-email-transmission.sh",@'  ${localstatedir}/lib/transmission-daemon/.config/settings.json
-		fi
 	fi
 }
  

@@ -35,18 +35,17 @@ PACKAGECONFIG[systemd] = "--with-systemd-daemon,--without-systemd-daemon,systemd
 # config.status: error: po/Makefile.in.in was not created by intltoolize.
 B = "${S}"
 do_configure_prepend() {
-
-     sed -i /AM_GLIB_GNU_GETTEXT/d ${S}/configure.ac
-     cd ${S}
-     ./update-version-h.sh
-     intltoolize --copy --force --automake
+	sed -i /AM_GLIB_GNU_GETTEXT/d ${S}/configure.ac
+	cd ${S}
+	./update-version-h.sh
+	intltoolize --copy --force --automake
 }
 
 do_install_initd() {
 	install -d ${D}${sysconfdir}/init.d
-    install -m 0744 ${WORKDIR}/transmission-daemon ${D}${sysconfdir}/init.d/
+	install -m 0744 ${WORKDIR}/transmission-daemon ${D}${sysconfdir}/init.d/
 	sed -i -e 's@#TRANSMISSION_ARGS=""@TRANSMISSION_ARGS=" -g ${sysconfdir}"@'  ${D}${sysconfdir}/init.d/transmission-daemon
-    chown root:root ${D}${sysconfdir}/init.d/transmission-daemon
+	chown root:root ${D}${sysconfdir}/init.d/transmission-daemon
 }
 
 do_install_systemd() {
@@ -63,13 +62,11 @@ do_install_send_mail_script() {
 }
 
 do_set_download_dir() {
-    
 	sed -i -e 's@"download-dir": "", @"download-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${sysconfdir}/settings.json
 	sed -i -e 's@"incomplete-dir": "", @"incomplete-dir": "${DOWNLOAD_DIR_TRANSMISSION}",@'   ${D}${sysconfdir}/settings.json
 }
 
 do_set_whitelist() {
-
 	if [ -z ${IP_ALLOWED_TRANSMISSION+x} ]; then
 	#${@bb.warn('transmission : IP_ALLOWED_TRANSMISSION is not set so rpc-whitelist-enabled will be disabled' )}
 		sed -i -e 's@"rpc-whitelist-enabled": true,@"rpc-whitelist-enabled": false,@'   ${D}${sysconfdir}/settings.json;

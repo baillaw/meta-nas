@@ -44,14 +44,14 @@ do_configure_prepend() {
 do_install_initd() {
 	install -d ${D}${sysconfdir}/init.d
 	install -m 0744 ${WORKDIR}/transmission-daemon ${D}${sysconfdir}/init.d/
-	sed -i -e 's@#TRANSMISSION_ARGS=""@TRANSMISSION_ARGS=" -g ${sysconfdir}"@'  ${D}${sysconfdir}/init.d/transmission-daemon
+	sed -i -e 's@#TRANSMISSION_ARGS=""@TRANSMISSION_ARGS=" -g ${HOME_DIR_TRANSMISSION}"@'  ${D}${sysconfdir}/init.d/transmission-daemon
 	chown root:root ${D}${sysconfdir}/init.d/transmission-daemon
 }
 
 do_install_systemd() {
 	install -d ${D}${nonarch_base_libdir}/systemd/system
 	install -m 0644 ${S}/daemon/transmission-daemon.service ${D}${nonarch_base_libdir}/systemd/system
-	sed -i -e 's@/usr/bin/transmission-daemon -f --log-error@/usr/bin/transmission-daemon -f --log-error -g ${sysconfdir}@' ${D}${nonarch_base_libdir}/systemd/system/transmission-daemon.service
+	sed -i -e 's@/usr/bin/transmission-daemon -f --log-error@/usr/bin/transmission-daemon -f --log-error -g ${HOME_DIR_TRANSMISSION}@' ${D}${nonarch_base_libdir}/systemd/system/transmission-daemon.service
 
 }
 

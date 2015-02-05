@@ -23,6 +23,7 @@ IMAGE_INSTALL = "\
     transmission-web \
     filemanager \
     dhcp-client \
+    minidlna \
      "
 
 inherit core-image

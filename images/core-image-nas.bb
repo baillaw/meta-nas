@@ -22,6 +22,7 @@ IMAGE_INSTALL = "\
     packagegroup-core-boot \
     transmission-web \
     filemanager \
+    dhcp-client \
      "
 
 inherit core-image

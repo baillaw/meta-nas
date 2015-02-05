@@ -3,7 +3,7 @@ being fully compliant with DLNA/UPnP-AV clients."
 LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://LICENCE;md5=b1a795ac1a06805cf8fd74920bc46b5c"
 
-DEPENDS = "flac libav jpeg sqlite3 libexif libogg libid3tag"
+DEPENDS = "flac libav jpeg sqlite3 libexif libogg libid3tag libvorbis"
 
 SRC_URI = "${SOURCEFORGE_MIRROR}/${PN}/${PN}_${PV}_src.tar.gz \
     file://search-for-headers-in-staging-dir.patch \
@@ -19,6 +19,7 @@ export STAGING_DIR_HOST
 
 inherit autotools update-rc.d
 
+B = "${S}"
 do_configure_prepend(){
 	cd ${S}
 	./genconfig.sh

@@ -79,13 +79,15 @@ do_set_whitelist() {
 do_install_append() {
 
 	install -d ${D}${HOME_DIR_TRANSMISSION}
+	install -d ${D}${DOWNLOAD_DIR_TRANSMISSION}
 	install -m 0644 ${WORKDIR}/settings.json ${D}${HOME_DIR_TRANSMISSION}/settings.json
 	do_set_download_dir
 	do_set_whitelist
 	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
 	${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
-	chmod 0644 -R ${D}${HOME_DIR_TRANSMISSION}
 	chown -R transmission:transmission ${D}${HOME_DIR_TRANSMISSION}
+	chown -R transmission:transmission ${D}${DOWNLOAD_DIR_TRANSMISSION}
+
 }
 
 pkg_postinst_${PN}() {
@@ -103,7 +105,7 @@ FILES_${PN}-client = "${bindir}/transmission-remote ${bindir}/transmission-cli $
 FILES_${PN}-gui += "${bindir}/transmission-gtk ${datadir}/icons ${datadir}/applications ${datadir}/pixmaps"
 FILES_${PN}-web = "${datadir}/transmission/web"
 
-FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir} ${HOME_DIR_TRANSMISSION}/settings.json ${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', '${bindir}/send-email-transmission.sh', '', d)}"
+FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir} ${DOWNLOAD_DIR_TRANSMISSION} ${HOME_DIR_TRANSMISSION}/settings.json ${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', '${bindir}/send-email-transmission.sh', '', d)}"
 
 SYSTEMD_SERVICE_${PN} = "transmission-daemon.service"
 USERADD_PACKAGES = "${PN}"

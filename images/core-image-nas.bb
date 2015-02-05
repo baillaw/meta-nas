@@ -4,16 +4,11 @@ functionality installed."
 IMAGE_FEATURES += "splash ssh-server-openssh"
 
 
-setDownloadDirectory (){
+set_hostname (){
      #!/bin/sh -e
-     if [ x"${DOWNLOAD_DIR_TRANSMISSION}" = "x" ]; then
-          exit 0
-     else
-         mkdir -p  ${IMAGE_ROOTFS}/${DOWNLOAD_DIR_TRANSMISSION}
-         chmod 666 ${IMAGE_ROOTFS}/${DOWNLOAD_DIR_TRANSMISSION}
-     fi
+     echo "MyNAS" > ${IMAGE_ROOTFS}/etc/hostname;
 }
-ROOTFS_POSTPROCESS_COMMAND += "setDownloadDirectory; "
+ROOTFS_POSTPROCESS_COMMAND += "set_hostname; "
 
 
 IMAGE_INSTALL = "\

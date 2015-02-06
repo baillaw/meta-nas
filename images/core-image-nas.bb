@@ -3,13 +3,11 @@ functionality installed."
 
 IMAGE_FEATURES += "splash ssh-server-openssh"
 
-
 set_hostname (){
      #!/bin/sh -e
      echo "MyNAS" > ${IMAGE_ROOTFS}/etc/hostname;
 }
 ROOTFS_POSTPROCESS_COMMAND += "set_hostname; "
-
 
 IMAGE_INSTALL = "\
     ${CORE_IMAGE_BASE_INSTALL} \
@@ -19,6 +17,7 @@ IMAGE_INSTALL = "\
     filemanager \
     dhcp-client \
     minidlna \
+    menunas \
      "
 
 inherit core-image

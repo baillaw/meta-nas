@@ -17,9 +17,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6b2a2e44797724bf46ea769edb0f54a7"
 
 do_compile[noexec] = "1"
-
-do_configure () {
-}
+do_configure[noexec] = "1"
 
 do_install () {
     # Do it carefully

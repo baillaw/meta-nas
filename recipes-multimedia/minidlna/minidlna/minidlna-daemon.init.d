@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NAME="minidlna"
-DAEMON=$(which $NAME)
+DAEMON=/usr/sbin/minidlnad
 SCRIPTNAME=/etc/init.d/$NAME
 PIDFILE=/var/run/$NAME.pid
 CONF=/etc/$NAME.conf

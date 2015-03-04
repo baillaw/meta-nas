@@ -3,9 +3,8 @@ Description=Minidlna Daemon
 After=network.target
 
 [Service]
-User=transmission
 Type=notify
-ExecStart=/usr/bin/minidlna -f /etc/minidlna.conf
+ExecStart=/usr/sbin/minidlnad -f /etc/minidlna.conf
 
 [Install]
 WantedBy=multi-user.target

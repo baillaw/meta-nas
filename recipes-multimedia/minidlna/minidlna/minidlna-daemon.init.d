@@ -26,7 +26,7 @@ start_function() {
     if [ "$pid" != "" ]; then
         echo -n "$pid" > ${PIDFILE}
     fi
-} 
+}
 
 stop_function() {
 

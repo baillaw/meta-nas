@@ -66,3 +66,6 @@ add LICENSE_FLAGS_WHITELIST
 ```text
 > runqemu qemux86 core-image-nas
 ```
+With a web navigator such as firefox, go to http://192.168.7.2 and enjoy.
+
+192.168.7.2 is the address given to qemu machine by default

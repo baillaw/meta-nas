@@ -63,10 +63,12 @@ add LICENSE_FLAGS_WHITELIST
 > bitbake core-image-nas 
 ```
 ## Test your image:
+On a terminal
 ```text
 > runqemu qemux86 core-image-nas
 ```
-With a web navigator such as firefox, go to
+
+On a web navigator such as firefox, go to
 
 http://192.168.7.2 and enjoy.
 

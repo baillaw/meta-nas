@@ -68,9 +68,8 @@ add LICENSE_FLAGS_WHITELIST
 ```
 With a web navigator such as firefox, go to
 
-```text
-> http://192.168.7.2 and enjoy.
-```
+http://192.168.7.2 and enjoy.
+
 192.168.7.2 should be the address given to qemu machine by default
 
 

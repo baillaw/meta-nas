@@ -74,4 +74,6 @@ http://192.168.7.2 and enjoy.
 
 192.168.7.2 should be the address given to qemu machine by default
 
+You should see a HTML Menu with file manager & Transmission (Torrent Client)
+
 

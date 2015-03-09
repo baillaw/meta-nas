@@ -4,6 +4,6 @@ SECTION = "devel/python"
 LICENSE = "MIT"
 SRCNAME = "Flexget"
 
-inherit binpackage
+inherit bin_package
 
 RDEPENDS_${PN} += "python-pip"

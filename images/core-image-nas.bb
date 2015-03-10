@@ -18,6 +18,7 @@ IMAGE_INSTALL = "\
     dhcp-client \
     minidlna \
     menunas \
-     "
+    flexget \
+    "
 
 inherit core-image

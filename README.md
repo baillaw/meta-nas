@@ -1,7 +1,7 @@
 # meta-nas
 # Description
 
-Meta-nas is a meta that provides mainly these following packages
+Meta-nas (OpenEmbedded / Yocto Meta) provides mainly these following packages
 * A torrent client : Transmission (www.transmissionbt.com/)
 * A web file-explorer: Filemanager (https://github.com/simogeo/Filemanager)
 * A ssh guardian : fail2ban (https://github.com/fail2ban/fail2ban)

@@ -1,5 +1,27 @@
 # meta-nas
 # Description
+
+Meta-nas is a meta that provides mainly these following packages
+* A torrent client : Transmission (www.transmissionbt.com/)
+* A web file-explorer: Filemanager (https://github.com/simogeo/Filemanager)
+* A ssh guardian : fail2ban (https://github.com/fail2ban/fail2ban)
+* A DLNA sever : miniDlna
+
+Theses services are avaibles throught WEB Interface
+
+# Screenshots
+* HomePage
+![HOMEPAGE](https://raw.githubusercontent.com/baillaw/meta-nas/master/screenshots/Homepage.jpg)
+
+* FileMnager
+![FILEMANAGER](https://raw.githubusercontent.com/baillaw/meta-nas/master/screenshots/FilesManager.jpg)
+
+* DLNA Server
+![DLNA Server status ](https://raw.githubusercontent.com/baillaw/meta-nas/master/screenshots/DLNA.jpg)
+
+* Transmission
+![TRANSMISSION](https://raw.githubusercontent.com/baillaw/meta-nas/master/screenshots/Transmission.jpg)
+
 # How to test meta-nas
 The easy way to test the meta-nas is to use the poky distribution.
 

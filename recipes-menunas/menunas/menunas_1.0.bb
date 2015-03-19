@@ -2,7 +2,7 @@ DESCRIPTION = "A web Nas Menu"
 SECTION = "network"
 HOMEPAGE = "https://github.com/baillaw/meta-nas"
 
-RDEPENDS_${PN} = "transmission-web filemanager"
+RDEPENDS_${PN} = "transmission-web filemanager minidlna "
 
 SRC_URI = "file://index.html"
 SRC_URI += "file://COPYING"

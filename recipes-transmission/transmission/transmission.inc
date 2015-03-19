@@ -75,6 +75,10 @@ do_set_whitelist() {
 	fi
 }
 
+do_set_user_pass() {
+	sed -i -e 's|"rpc-username": "@USER@",|"rpc-username": "${USER_FOR_AUTH}",|'   ${D}${HOME_DIR_TRANSMISSION}/settings.json
+	sed -i -e 's|"rpc-password": "@PASS@",|"rpc-password": "${PASS_FOR_AUTH}",|'   ${D}${HOME_DIR_TRANSMISSION}/settings.json
+}
 
 do_install_append() {
 
@@ -82,6 +86,7 @@ do_install_append() {
 	install -d ${D}${DOWNLOAD_DIR_TRANSMISSION}
 	install -m 0644 ${WORKDIR}/settings.json ${D}${HOME_DIR_TRANSMISSION}/settings.json
 	do_set_download_dir
+	do_set_user_pass
 	do_set_whitelist
 	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
 	${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}

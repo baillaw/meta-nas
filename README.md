@@ -68,17 +68,17 @@ For more information:
 ```
 ## add your meta:
 ```text
-> vi conf/bblayers.conf 
+>  bitbake-layers add-layer ../../meta-nas
+>  bitbake-layers add-layer ../../meta-oe
+
 ```
-* Add meta-nas path to BBLAYERS variable
-* Add meta-oe path to BBLAYERS variable
- 
+
 ## add your meta-nas:
 add LICENSE_FLAGS_WHITELIST
 ```text
-> vi conf/local.conf
+> echo "LICENSE_FLAGS_WHITELIST += \"commercial\"" >> conf/local.conf
 ```
- LICENSE_FLAGS_WHITELIST += "commercial"
+
 
 ## Build your image:
 ```text

@@ -49,11 +49,11 @@ For more information:
 ## get meta-oe, clone with Git (preferred)
 * from dizzy revision
 ```text
-> git clone -b dizzy git@github.com:openembedded/meta-oe.git
+> git clone -b dizzy git://git.openembedded.org/meta-openembedded
 ```
 * from master
 ```text
-> git clone git@github.com:openembedded/meta-oe.git
+> git clone git://git.openembedded.org/meta-openembedded
 ```
 
 ## get meta-nas:
@@ -69,7 +69,7 @@ For more information:
 ## add your meta:
 ```text
 >  bitbake-layers add-layer ../../meta-nas
->  bitbake-layers add-layer ../../meta-oe
+>  bitbake-layers add-layer ../../meta-openembedded/meta-oe
 
 ```
 

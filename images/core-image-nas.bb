@@ -7,7 +7,13 @@ set_hostname (){
      #!/bin/sh -e
      echo "MyNAS" > ${IMAGE_ROOTFS}/etc/hostname;
 }
-ROOTFS_POSTPROCESS_COMMAND += "set_hostname; "
+
+set_sudoers_rules (){
+     #!/bin/sh -e
+     echo '%sudo ALL=(ALL) ALL' > ${IMAGE_ROOTFS}/etc/sudoers.d/nas
+}
+
+ROOTFS_POSTPROCESS_COMMAND += "set_hostname; set_sudoers_rules;"
 
 IMAGE_INSTALL = "\
     ${CORE_IMAGE_BASE_INSTALL} \
@@ -20,4 +26,7 @@ IMAGE_INSTALL = "\
     menunas \
      "
 
-inherit core-image
+inherit core-image extrausers
+
+EXTRA_USERS_PARAMS = "groupadd sudo; useradd -P '${PASS_FOR_AUTH}' -G sudo ${USER_FOR_AUTH}; usermod -L root;"
+

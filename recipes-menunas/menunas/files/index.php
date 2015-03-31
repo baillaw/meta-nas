@@ -69,6 +69,15 @@ li {
   <div class="left"><p>Main menu of your Nas.</p></div>
   <div class="content">
     <h2>MENU</h2>
+<?php
+ echo '<h3> Free disk space : ';
+ $bytes = disk_free_space("/");
+ $units = array( 'B', 'KB', 'MB', 'GB', 'TB' );
+ $base = 1024;
+ $index = min((int)log($bytes , $base) , count($units) - 1);
+ echo sprintf('%1.2f' , $bytes / pow($base,$index)) . ' ' . $units[$index] . '<br />';
+ echo '</h3>';
+?>
 <ul>
 <li><a href="#" onclick="javascript:window.location.port=9091">Torrent Client Interface</a></li>
 <li><a href="./filemanager">Browse contents</a></li>

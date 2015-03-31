@@ -4,7 +4,7 @@ HOMEPAGE = "https://github.com/baillaw/meta-nas"
 
 RDEPENDS_${PN} = "transmission-web filemanager minidlna "
 
-SRC_URI = "file://index.html"
+SRC_URI = "file://index.php"
 SRC_URI += "file://COPYING"
 
 SRC_URI[md5sum] = "665547ad10bd4aeda5f36fd23558fd8b"
@@ -23,7 +23,7 @@ do_install () {
     # Do it carefully
     [ -d "${S}" ] || exit 1
     mkdir -p ${D}/www/pages || exit 1
-    cp ${WORKDIR}/index.html ${D}/www/pages/
+    cp ${WORKDIR}/index.php ${D}/www/pages/
 }
 
 FILES_${PN} = "/"

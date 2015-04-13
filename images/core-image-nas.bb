@@ -35,6 +35,7 @@ ROOTFS_POSTPROCESS_COMMAND += "set_hostname; set_sudoers_rules; set_ssh_keys;"
 
 IMAGE_INSTALL = "\
     ${CORE_IMAGE_BASE_INSTALL} \
+    udev-extraconf \
     packagegroup-core-full-cmdline \
     packagegroup-core-boot \
     transmission-web \

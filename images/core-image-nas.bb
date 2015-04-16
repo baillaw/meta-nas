@@ -22,9 +22,9 @@ set_ssh_keys (){
      fi
      mkdir -p ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}/.ssh
      cp ${HOME}/.ssh/id_rsa_meta-nas.pub  ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}/.ssh/authorized_keys
-     chown -R ${UID_FOR_AUTH}:${UID_FOR_AUTH} ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}/.ssh
      chmod 700 ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}/.ssh
      chmod 600 ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}/.ssh/authorized_keys
+     chown ${UID_FOR_AUTH}:${UID_FOR_AUTH} -R ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}
 }
 
 

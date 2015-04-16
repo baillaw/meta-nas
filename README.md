@@ -35,6 +35,11 @@ Note:
 > cd ${WORKINGDIR}
 ```
 ## get poky, clone with Git (preferred)
+* from fido version
+```text
+> git clone -b fido git://git.yoctoproject.org/poky.git
+```
+
 * from master
 ```text
 > git clone git://git.yoctoproject.org/poky.git
@@ -43,6 +48,12 @@ For more information:
  https://www.yoctoproject.org/downloads
  
 ## get meta-oe, clone with Git (preferred)
+
+* from fido version
+```text
+> git clone -b fido git://git.openembedded.org/meta-openembedded
+```
+
 * from master
 ```text
 > git clone git://git.openembedded.org/meta-openembedded

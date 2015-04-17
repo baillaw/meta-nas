@@ -24,6 +24,8 @@ do_install () {
     [ -d "${S}" ] || exit 1
     mkdir -p ${D}/www/pages || exit 1
     cp ${WORKDIR}/index.php ${D}/www/pages/
+    sed -i -e 's/@DOWNLOAD_DIR@/${DOWNLOAD_DIR_TRANSMISSION}/' ${D}/www/pages/index.php
+
 }
 
 FILES_${PN} = "/"

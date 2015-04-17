@@ -71,7 +71,7 @@ li {
     <h2>MENU</h2>
 <?php
  echo '<h3> Free disk space : ';
- $bytes = disk_free_space("/");
+ $bytes = disk_free_space("@DOWNLOAD_DIR@");
  $units = array( 'B', 'KB', 'MB', 'GB', 'TB' );
  $base = 1024;
  $index = min((int)log($bytes , $base) , count($units) - 1);

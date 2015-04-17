@@ -4,7 +4,9 @@ HOMEPAGE = "https://github.com/baillaw/meta-nas"
 
 RDEPENDS_${PN} = "transmission-web filemanager minidlna "
 
-SRC_URI = "file://index.php"
+SRC_URI = "file://index.php "
+SRC_URI_rasberrypi = "file://index.php_raspberrypi "
+SRC_URI_rasberrypi2 = "file://index.php_raspberrypi "
 SRC_URI += "file://COPYING"
 
 SRC_URI[md5sum] = "665547ad10bd4aeda5f36fd23558fd8b"
@@ -23,8 +25,8 @@ do_install () {
     # Do it carefully
     [ -d "${S}" ] || exit 1
     mkdir -p ${D}/www/pages || exit 1
-    cp ${WORKDIR}/index.php ${D}/www/pages/
-    sed -i -e 's/@DOWNLOAD_DIR@/${DOWNLOAD_DIR_TRANSMISSION}/' ${D}/www/pages/index.php
+    cp ${WORKDIR}/"${@bb.utils.contains_any('MACHINE', [ 'rasberrypi2', 'rasberrypi' ], 'index.php_raspberrypi', 'index.php', d)}" ${D}/www/pages/index.php
+    sed -i -e 's|@DOWNLOAD_DIR@|${DOWNLOAD_DIR_TRANSMISSION}|' ${D}/www/pages/index.php
 
 }
 

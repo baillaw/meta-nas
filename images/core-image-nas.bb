@@ -2,6 +2,8 @@ DESCRIPTION = "A console-only image with more full-featured Linux system \
 functionality installed."
 
 IMAGE_FEATURES += "splash ssh-server-openssh"
+IMAGE_FEATURES += "package-management" 
+
 inherit core-image extrausers
 
 set_hostname (){

@@ -29,11 +29,15 @@ set_ssh_keys (){
      chown ${UID_FOR_AUTH}:${UID_FOR_AUTH} -R ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}
 }
 
+add_change_web_password_script (){
+     mkdir -p ${IMAGE_ROOTFS}/usr/bin/
+     cp ${THISDIR}/change_webpass.sh ${IMAGE_ROOTFS}/usr/bin/change_webpass.sh
+     chmod 700 ${IMAGE_ROOTFS}/usr/bin/change_webpass.sh
+     chown ${UID_FOR_AUTH}:${UID_FOR_AUTH} ${IMAGE_ROOTFS}/usr/bin/change_webpass.sh
+}
 
 
-
-
-ROOTFS_POSTPROCESS_COMMAND += "set_hostname; set_sudoers_rules; set_ssh_keys;"
+ROOTFS_POSTPROCESS_COMMAND += "set_hostname; set_sudoers_rules; set_ssh_keys;add_change_web_password_script;"
 
 IMAGE_INSTALL = "\
     ${CORE_IMAGE_BASE_INSTALL} \

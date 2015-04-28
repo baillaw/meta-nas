@@ -59,35 +59,35 @@ For more information:
 > git clone git://git.openembedded.org/meta-openembedded
 ```
 
-## get meta-nas:
+## get meta-nas
 ```text
 > git clone git@github.com:baillaw/meta-nas.git
 ```
 
-## init your project:
+## init your project
 ```text
 > cd poky
 > . oe-init-build-env build-nas
 ```
-## add your meta:
+## add your meta
 ```text
 >  bitbake-layers add-layer ../../meta-nas
 >  bitbake-layers add-layer ../../meta-openembedded/meta-oe
 
 ```
 
-## add your meta-nas:
+## add your meta-nas
 add LICENSE_FLAGS_WHITELIST
 ```text
 > echo "LICENSE_FLAGS_WHITELIST += \"commercial\"" >> conf/local.conf
 ```
 
 
-## Build your image:
+## Build your image
 ```text
 > bitbake core-image-nas 
 ```
-## Test your image:
+## Test your image
 On a terminal
 ```text
 > runqemu qemux86 core-image-nas
@@ -101,4 +101,14 @@ http://192.168.7.2 and enjoy.
 
 You should see a HTML Menu with file manager & Transmission (Torrent Client)
 
+## User / Password for web interface
 
+Default user and password are : 
+```text
+meta-nas / meta-nas
+```
+
+You could change them by using change_webpass.sh script
+```text
+change_webpass.sh
+```

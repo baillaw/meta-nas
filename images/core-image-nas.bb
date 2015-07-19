@@ -36,8 +36,25 @@ add_change_web_password_script (){
      chown ${UID_FOR_AUTH}:${UID_FOR_AUTH} ${IMAGE_ROOTFS}/usr/bin/change_webpass.sh
 }
 
+add_ACPI_powerbutton (){
+     cat > ${IMAGE_ROOTFS}/etc/acpi/powerbtn.sh <<EOF
+     #!/bin/sh
+     # /etc/acpi/powerbtn.sh
+     # Initiates a shutdown when the power putton has been
+     # pressed.
+     /sbin/shutdown -h now "Power button pressed"
+     EOF
 
-ROOTFS_POSTPROCESS_COMMAND += "set_hostname; set_sudoers_rules; set_ssh_keys;add_change_web_password_script;"
+     chmod a+x ${IMAGE_ROOTFS}/etc/acpi/powerbtn.sh
+     cat  > ${IMAGE_ROOTFS}/etc/acpi/events/powerbtn <<EOF
+     event=button[ /]power
+     action=/etc/acpi/powerbtn.sh
+     EOF   
+}
+
+cat > /mnt/"${USB_DISKID}"/boot/grub2/grub.cfg <<EOF
+
+ROOTFS_POSTPROCESS_COMMAND += "set_hostname; set_sudoers_rules; set_ssh_keys;add_change_web_password_script;add_ACPI_powerbutton;"
 
 IMAGE_INSTALL = "\
     ${CORE_IMAGE_BASE_INSTALL} \

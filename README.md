@@ -112,3 +112,13 @@ You could change them by using change_webpass.sh script
 ```text
 change_webpass.sh
 ```
+
+## Troubleshooting :
+
+OS doesn't start automatically, blocked in grub menu.
+
+Add theses lines in /boot/grub/grub.cfg
+```text 
+set default="0"
+set timeout="10"
+```

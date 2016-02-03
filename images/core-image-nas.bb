@@ -52,7 +52,6 @@ add_ACPI_powerbutton (){
      EOF   
 }
 
-cat > /mnt/"${USB_DISKID}"/boot/grub2/grub.cfg <<EOF
 
 ROOTFS_POSTPROCESS_COMMAND += "set_hostname; set_sudoers_rules; set_ssh_keys;add_change_web_password_script;add_ACPI_powerbutton;"
 

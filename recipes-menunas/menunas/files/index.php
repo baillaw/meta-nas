@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<?php  if($_GET['shutdown']){    exec(shutdown -h now);} ?>
 <html>
 <head>
 <style>
@@ -66,7 +67,9 @@ li {
 
 <div class="container">
   <div class="header"><h1 class="header">MyNAS</h1></div>
-  <div class="left"><p>Main menu of your Nas.</p></div>
+  <div class="left"><p>Main menu of your Nas.</p>
+  <li><a href="#" onclick="alert('NAS Stop asked!');window.location.search='?shutdown=1';window.location.reload();">STOP</a></li> 
+  </div>
   <div class="content">
     <h2>MENU</h2>
 <?php

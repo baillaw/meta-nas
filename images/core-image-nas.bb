@@ -37,19 +37,21 @@ add_change_web_password_script (){
 }
 
 add_ACPI_powerbutton (){
-     cat > ${IMAGE_ROOTFS}/etc/acpi/powerbtn.sh <<EOF
+	 mkdir -p ${IMAGE_ROOTFS}/etc/acpi/events
+     cat <<EOF > ${IMAGE_ROOTFS}/etc/acpi/powerbtn.sh
      #!/bin/sh
      # /etc/acpi/powerbtn.sh
      # Initiates a shutdown when the power putton has been
      # pressed.
      /sbin/shutdown -h now "Power button pressed"
-     EOF
+EOF
 
      chmod a+x ${IMAGE_ROOTFS}/etc/acpi/powerbtn.sh
-     cat  > ${IMAGE_ROOTFS}/etc/acpi/events/powerbtn <<EOF
+     
+     cat <<EOF > ${IMAGE_ROOTFS}/etc/acpi/events/powerbtn
      event=button[ /]power
      action=/etc/acpi/powerbtn.sh
-     EOF   
+EOF   
 }
 
 

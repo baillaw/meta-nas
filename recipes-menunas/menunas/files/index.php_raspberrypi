@@ -91,6 +91,7 @@ li {
 <ul>
 <li><a href="#" onclick="javascript:window.location.port=9091">Torrent Client Interface</a></li>
 <li><a href="./filemanager">Browse contents</a></li>
+<li><a href="./mutimedia_player">mutimedia player</a></li>
 <li><a href="#" onclick="javascript:window.location.port=8200">DLNA Server Status</a></li>
 </ul>
   </div>

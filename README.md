@@ -35,9 +35,9 @@ Note:
 > cd ${WORKINGDIR}
 ```
 ## get poky, clone with Git (preferred)
-* from fido version
+* from krogoth version
 ```text
-> git clone -b fido git://git.yoctoproject.org/poky.git
+> git clone -b krogoth git://git.yoctoproject.org/poky.git
 ```
 
 * from master
@@ -48,11 +48,6 @@ For more information:
  https://www.yoctoproject.org/downloads
  
 ## get meta-oe, clone with Git (preferred)
-
-* from fido version
-```text
-> git clone -b fido git://git.openembedded.org/meta-openembedded
-```
 
 * from master
 ```text

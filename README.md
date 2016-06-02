@@ -121,4 +121,21 @@ set timeout="10"
 ```text 
 . oe-init-build-env build-nas
  bitbake package-index
+ cd tmp/deploy/rpm/
+ python  -m SimpleHTTPServer
+ 
+# Exectute the output of this script on the nas
+ 
+ REPOS=`find .  -maxdepth 1 -type d -printf '%P\n'`
+ IP=`ip route get 8.8.8.8 | awk 'NR==1 {print $NF}'`
+ for repo in $REPOS	;do
+   if [ "$repo" != "." ];then
+     echo "smart channel -y --add $repo type=rpm-md baseurl=http://$IP:8000/$repo"
+   fi
+done
+```
+ 
+ 
+ 
+ 
 ```

@@ -117,3 +117,8 @@ Add theses lines in /boot/grub/grub.cfg
 set default="0"
 set timeout="10"
 ```
+## Update :
+```text 
+. oe-init-build-env build-nas
+ bitbake package-index
+```

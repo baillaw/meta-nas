@@ -20,7 +20,7 @@ SRC_URI = "svn://svn.transmissionbt.com/Transmission/;protocol=svn;module=trunk 
 S = "${WORKDIR}/trunk"
 
 SRC_URI =+ "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '', 'file://transmission-daemon', d)}"
-SRC_URI =+ "${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', 'file://send-email-transmission.sh', '', d)}"
+SRC_URI =+ "${@bb.utils.contains('DISTRO_FEATURES', 'meta-nas_busybox_send_email', 'file://send-email-transmission.sh', '', d)}"
 HOME_DIR_TRANSMISSION ??= "${localstatedir}/lib/transmission-daemon"
 DOWNLOAD_DIR_TRANSMISSION ??= "${HOME_DIR_TRANSMISSION}/Downloads"
 inherit autotools gettext useradd update-rc.d  systemd distro_features_check
@@ -88,7 +88,7 @@ do_install_append() {
 	do_set_user_pass
 	do_set_whitelist
 	${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
-	${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
+	${@bb.utils.contains('DISTRO_FEATURES', 'meta-nas_busybox_send_email', 'do_install_send_mail_script', '', d)}
 	chown -R transmission:transmission ${D}${HOME_DIR_TRANSMISSION}
 	chown -R transmission:transmission ${D}${DOWNLOAD_DIR_TRANSMISSION}
 
@@ -109,7 +109,7 @@ FILES_${PN}-client = "${bindir}/transmission-remote ${bindir}/transmission-cli $
 FILES_${PN}-gui += "${bindir}/transmission-gtk ${datadir}/icons ${datadir}/applications ${datadir}/pixmaps"
 FILES_${PN}-web = "${datadir}/transmission/web"
 
-FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir} ${DOWNLOAD_DIR_TRANSMISSION} ${HOME_DIR_TRANSMISSION}/settings.json ${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', '${bindir}/send-email-transmission.sh', '', d)}"
+FILES_${PN} = "${bindir}/transmission-daemon ${sysconfdir} ${DOWNLOAD_DIR_TRANSMISSION} ${HOME_DIR_TRANSMISSION}/settings.json ${@bb.utils.contains('DISTRO_FEATURES', 'meta-nas_busybox_send_email', '${bindir}/send-email-transmission.sh', '', d)}"
 
 SYSTEMD_SERVICE_${PN} = "transmission-daemon.service"
 USERADD_PACKAGES = "${PN}"

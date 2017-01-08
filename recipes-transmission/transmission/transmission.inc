@@ -5,7 +5,7 @@ HOMEPAGE = "www.transmissionbt.com/"
 DEPENDS = "libevent gnutls openssl libtool intltool-native curl"
 
 RDEPENDS_${PN}-web = "${PN}"
-RDEPENDS_${PN} = "${@base_contains('DISTRO_FEATURES', 'systemd', 'systemd', 'start-stop-daemon', d)}"
+RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', 'start-stop-daemon', d)}"
 
 LICENSE = "MIT & GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=7ee657ac1dce0e7353033fc06c8087d2"
@@ -19,14 +19,14 @@ SRC_URI = "svn://svn.transmissionbt.com/Transmission/;protocol=svn;module=trunk 
 
 S = "${WORKDIR}/trunk"
 
-SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'systemd', '', 'file://transmission-daemon', d)}"
-SRC_URI =+ "${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'file://send-email-transmission.sh', '', d)}"
+SRC_URI =+ "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '', 'file://transmission-daemon', d)}"
+SRC_URI =+ "${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', 'file://send-email-transmission.sh', '', d)}"
 HOME_DIR_TRANSMISSION ??= "${localstatedir}/lib/transmission-daemon"
 DOWNLOAD_DIR_TRANSMISSION ??= "${HOME_DIR_TRANSMISSION}/Downloads"
 inherit autotools gettext useradd update-rc.d  systemd distro_features_check
 
-PACKAGECONFIG = "${@base_contains('DISTRO_FEATURES', 'x11', 'gtk', '', d)} \
-                 ${@base_contains('DISTRO_FEATURES','systemd','systemd','',d)}"
+PACKAGECONFIG = "${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'gtk', '', d)} \
+                 ${@bb.utils.contains('DISTRO_FEATURES','systemd','systemd','',d)}"
 
 PACKAGECONFIG[gtk] = " --with-gtk,--without-gtk,gtk+3,"
 PACKAGECONFIG[systemd] = "--with-systemd-daemon,--without-systemd-daemon,systemd,"
@@ -68,7 +68,6 @@ do_set_download_dir() {
 
 do_set_whitelist() {
 	if [ -z ${IP_ALLOWED_TRANSMISSION+x} ]; then
-	#${@bb.warn('transmission : IP_ALLOWED_TRANSMISSION is not set so rpc-whitelist-enabled will be disabled' )}
 		sed -i -e 's@"rpc-whitelist-enabled": true,@"rpc-whitelist-enabled": false,@'   ${D}${HOME_DIR_TRANSMISSION}/settings.json;
 	else 
 		echo "var is set to '$var'"; 
@@ -88,8 +87,8 @@ do_install_append() {
 	do_set_download_dir
 	do_set_user_pass
 	do_set_whitelist
-	${@base_contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
-	${@base_contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
+	${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'do_install_systemd', 'do_install_initd', d)}
+	${@bb.utils.contains('DISTRO_FEATURES', 'busybox_send_email', 'do_install_send_mail_script', '', d)}
 	chown -R transmission:transmission ${D}${HOME_DIR_TRANSMISSION}
 	chown -R transmission:transmission ${D}${DOWNLOAD_DIR_TRANSMISSION}
 

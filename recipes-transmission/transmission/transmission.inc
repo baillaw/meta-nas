@@ -2,7 +2,7 @@ DESCRIPTION = "Transmission is a BitTorrent client w/ a built-in Ajax-Powered We
 SECTION = "network"
 HOMEPAGE = "www.transmissionbt.com/"
 
-DEPENDS = "libevent gnutls openssl libtool intltool-native curl"
+DEPENDS = "libevent gnutls openssl libtool intltool-native curl glib-2.0-native"
 
 RDEPENDS_${PN}-web = "${PN}"
 RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', 'start-stop-daemon', d)}"
@@ -14,10 +14,10 @@ REQUIRED_DISTRO_FEATURES = " libc-locale-code "
 # Upstream names releases after SVN revs
 PV = "r${SRCREV}"
 
-SRC_URI = "svn://svn.transmissionbt.com/Transmission/;protocol=svn;module=trunk \
+SRC_URI = "git://github.com/transmission/transmission \
           file://settings.json"
 
-S = "${WORKDIR}/trunk"
+S = "${WORKDIR}/git"
 
 SRC_URI =+ "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', '', 'file://transmission-daemon', d)}"
 SRC_URI =+ "${@bb.utils.contains('DISTRO_FEATURES', 'meta-nas_busybox_send_email', 'file://send-email-transmission.sh', '', d)}"

@@ -94,13 +94,9 @@ do_install_append() {
 
 }
 
-pkg_postinst_${PN}() {
-	if [ -n "$D" ]; then
-		exit 1
-	else
-		sysctl -w net.core.rmem_max=4194304
-		sysctl -w net.core.wmem_max=1048576
-	fi
+pkg_postinst_ontarget_${PN}() {
+	sysctl -w net.core.rmem_max=4194304
+	sysctl -w net.core.wmem_max=1048576
 }
  
 PACKAGES += "${PN}-gui ${PN}-client ${PN}-web"

@@ -5,7 +5,7 @@ HOMEPAGE = "www.transmissionbt.com/"
 DEPENDS = "libevent gnutls openssl libtool intltool-native curl glib-2.0-native"
 
 RDEPENDS_${PN}-web = "${PN}"
-RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', 'start-stop-daemon', d)}"
+RDEPENDS_${PN} = "${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd', '', d)}"
 
 LICENSE = "MIT & GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=7ee657ac1dce0e7353033fc06c8087d2"

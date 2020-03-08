@@ -5,7 +5,6 @@ IMAGE_FEATURES += "splash ssh-server-openssh"
 IMAGE_FEATURES += "package-management" 
 
 inherit core-image extrausers
-
 set_hostname (){
      #!/bin/sh -e
      echo "MyNAS" > ${IMAGE_ROOTFS}/etc/hostname;
@@ -20,7 +19,8 @@ set_sudoers_rules (){
 set_ssh_keys (){
      #!/bin/sh -e
      if [ ! -s ${HOME}/.ssh/id_rsa_meta-nas ]; then
-     ssh-keygen -b 4048 -t rsa -C "Meta Nas!" -f ${HOME}/.ssh/id_rsa_meta-nas
+     mkdir -p ${HOME}/.ssh/
+     /usr/bin/ssh-keygen -b 4048 -t rsa -C "Meta Nas!" -f ${HOME}/.ssh/id_rsa_meta-nas
      fi
      mkdir -p ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}/.ssh
      cp ${HOME}/.ssh/id_rsa_meta-nas.pub  ${IMAGE_ROOTFS}/home/${USER_FOR_AUTH}/.ssh/authorized_keys
